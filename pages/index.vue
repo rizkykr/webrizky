@@ -38,7 +38,7 @@ export default defineComponent({
       loadingText:
         '<span class="flex md:gap-2 gap-1 md:py-2 py-1"><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span></span>',
       messages: {
-        id: [
+        ID: [
           "Halo, Assalamualaikum 👋",
           "Saya Rizky",
           "Saya mendesain dan membuat kode apapun di web.",
@@ -47,7 +47,7 @@ export default defineComponent({
           this.getCurTime(),
           "👀 R."
         ],
-        en: [
+        EN: [
           "Hey there 👋",
           "I'm Rizky",
           "I design and code things on the web",
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   methods: {
     kirimPesan(lg) {
-      const datapesan = this.messages[(lg=='id'?lg:'en')];
+      const datapesan = this.messages[(lg=='ID'?lg:'EN')];
       if (this.pesancur < datapesan.length) {
         this.pesan.push(this.loadingText);
         setTimeout(() => {
@@ -92,7 +92,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = (this.fetchLokasi).country.toLowerCase();
+    this.loc = this.fetchLokasi.country;
     console.log(this.loc);
   },
   components: { Chat },
