@@ -92,7 +92,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = (this.fetchLokasi.cc).toLowerCase();
+    this.loc = (JSON.parse(this.fetchLokasi)).cc.toLowerCase();
     console.log(this.loc);
   },
   components: { Chat },
