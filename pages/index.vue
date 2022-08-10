@@ -92,8 +92,8 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = (this.fetchLokasi).country_code.toLowerCase();
-    console.log(this.loc);
+    // this.loc = (this.fetchLokasi).country_code.toLowerCase();
+    console.log(this.fetchLokasi);
   },
   components: { Chat },
 });
