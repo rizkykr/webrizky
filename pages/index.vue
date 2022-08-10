@@ -1,6 +1,5 @@
 <template>
   <div ref="message" class="apppesan md:m-4 m-2">
-
     <Head>
       <Meta property="og:site_name" content="rizkykr.com" />
       <Meta property="og:title" content="RizkyKR" />
@@ -20,12 +19,12 @@ import Chat from "~~/components/Chat.vue";
 export default defineComponent({
   async setup() {
     const { geoUrl } = useRuntimeConfig();
-    const [{ data: lokasi }] = await Promise.all([
-      useFetch(`${geoUrl}/json/`),
+    const [{ data: fetchLokasi }] = await Promise.all([
+      useFetch(`${geoUrl}/json/?fields=countryCode`),
       // useFetch(`https://api.github.com/orgs/nuxt/repos`)
     ])
 
-    return { lokasi }
+    return { fetchLokasi }
   },
   head: {
     title: "RizkyKR - Web Fullstack Developer",
@@ -34,7 +33,6 @@ export default defineComponent({
     return {
       pesan: [],
       loc: null,
-      curloc: null,
       pesancur: 0,
       typingSpeed: 20,
       loadingText:
@@ -64,20 +62,19 @@ export default defineComponent({
   watch: {
     // whenever question changes, this function will run
     loc(dt) {
-      this.curloc = 'id';
-      this.kirimPesan(this.curloc);
+      this.kirimPesan(dt);
     }
   },
   methods: {
     kirimPesan(lg) {
-      const datapesan = this.messages[lg];
+      const datapesan = this.messages[(lg=='id'?lg:'en')];
       if (this.pesancur < datapesan.length) {
         this.pesan.push(this.loadingText);
         setTimeout(() => {
           this.pesan[this.pesancur] = datapesan[this.pesancur];
           this.pesancur = this.pesancur + 1;
           setTimeout(() => {
-            this.kirimPesan(this.curloc);
+            this.kirimPesan(this.loc);
           }, 1000);
         }, datapesan[this.pesancur].replace(/<(?:.|\n)*?>/gm, "").length * this.typingSpeed + 500);
       }
@@ -95,7 +92,8 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = JSON.parse(this.lokasi);
+    this.loc = (this.fetchLokasi.countryCode).toLowerCase();
+    console.log(this.loc);
   },
   components: { Chat },
 });
