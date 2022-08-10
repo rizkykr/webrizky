@@ -2,7 +2,12 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  dev: false,
+  dev: true,
+  runtimeConfig: {
+    public: {
+      geoUrl: '', // fallback empty string, must be present tho
+    },
+  },
   app: {
     head: {
       viewport:
