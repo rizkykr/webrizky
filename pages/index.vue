@@ -17,7 +17,6 @@
 </template>
 <script>
 import Chat from "~~/components/Chat.vue";
-import { _ } from "lodash";
 export default defineComponent({
   async setup() {
     const { geoUrl } = useRuntimeConfig();
@@ -65,7 +64,7 @@ export default defineComponent({
   watch: {
     // whenever question changes, this function will run
     loc(dt) {
-      this.curloc = _.toLower(dt.country_code);
+      this.curloc = 'id';
       this.kirimPesan(this.curloc);
     }
   },
