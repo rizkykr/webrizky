@@ -20,7 +20,7 @@ export default defineComponent({
   async setup() {
     const { geoUrl } = useRuntimeConfig();
     const [{ data: fetchLokasi }] = await Promise.all([
-      useFetch(`${geoUrl}/json/?fields=countryCode`),
+      useFetch(geoUrl),
       // useFetch(`https://api.github.com/orgs/nuxt/repos`)
     ])
 
@@ -92,7 +92,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = (this.fetchLokasi.countryCode).toLowerCase();
+    this.loc = (this.fetchLokasi.cc).toLowerCase();
     console.log(this.loc);
   },
   components: { Chat },
