@@ -20,7 +20,8 @@ export default defineComponent({
   async setup() {
     const { geoUrl } = useRuntimeConfig();
     const [{ data: fetchLokasi }] = await Promise.all([
-      useFetch(`${geoUrl}/`),
+      useFetch(`https://api.myip.com`),
+      // useFetch(`${geoUrl}/`),
       // useFetch(`https://api.github.com/orgs/nuxt/repos`)
     ])
 
