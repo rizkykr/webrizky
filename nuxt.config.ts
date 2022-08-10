@@ -8,6 +8,9 @@ export default defineNuxtConfig({
       geoUrl: '', // fallback empty string, must be present tho
     },
   },
+  nitro: {
+    preset: 'node-server'
+  },
   app: {
     head: {
       viewport:
