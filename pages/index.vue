@@ -37,7 +37,7 @@ export default defineComponent({
       pesancur: 0,
       typingSpeed: 20,
       loadingText:
-        '<span class="flex md:gap-2 gap-1 md:py-2 py-1"><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span><span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span></span></span>',
+        '<span class="flex md:gap-2 gap-1 md:py-2 py-1"><span class="flex md:h-3 md:w-3 h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-3 md:w-3 h-2 w-2 bg-gray-500"></span></span><span class="flex md:h-3 md:w-3 h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-3 md:w-3 h-2 w-2 bg-gray-500"></span></span><span class="flex md:h-3 md:w-3 h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-3 md:w-3 h-2 w-2 bg-gray-500"></span></span></span>',
       messages: {
         id: [
           "Halo, Assalamualaikum 👋",
