@@ -19,11 +19,10 @@
 export default defineComponent({
   async setup() {
     function hanyaCode(txt) {
-      return txt.split(",")[2].replace('}', '').split(":")[1].split('"').join('').toLocaleLowerCase()
+      return txt.split(",")[2].replace('}', '').split(":")[1].split('"').join('').toLocaleLowerCase();
     }
-    const { geoUrl } = useRuntimeConfig();
     const [{ data: lokasi }] = await Promise.all([
-      useFetch(`/`, { parseResponse: txt => hanyaCode(txt), baseURL: geoUrl }),
+      useFetch(`https://api.myip.com`, { parseResponse: txt => hanyaCode(txt) }),
     ])
 
     return { lokasi }
