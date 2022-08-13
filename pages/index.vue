@@ -1,10 +1,12 @@
 <template>
+<div class='outeerapp flex flex-col fixed top-0 h-full w-screen '>
   <div
     ref="message"
-    class="apppesan fixed top-0 h-full w-screen flex flex-col md:justify-start justify-end"
+    class="apppesan flex flex-1 flex-col md:justify-start justify-end"
   >
-    <LazyBubbleChat v-for="txt in pesan" v-html="txt" />
-    <div
+    <LazyBubbleChat v-for="txt in pesan" v-html="txt" />    
+  </div>
+  <div
       class="md:fixed md:bottom-3 md:right-3 dark:bg-slate-800 md:p-0 p-2 md:mt-0 mt-1 md:shadow-none shadow-2xl"
     >
       <button
@@ -101,7 +103,7 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 </template>
 <script>
 import _ from "lodash";
