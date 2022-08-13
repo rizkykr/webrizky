@@ -1,4 +1,6 @@
 {
+  "name": "web-rizky",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "build": "nuxt build",
