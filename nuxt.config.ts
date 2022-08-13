@@ -2,16 +2,12 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  dev: true,
-  runtimeConfig: {
-    public: {
-      geoUrl: '', // fallback empty string, must be present tho
-    },
-  },
+  dev: false,
   nitro: {
     preset: 'node-server'
   },
   app: {
+    buildAssetsDir: "/apps/",
     head: {
       viewport:
         "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",

@@ -25,7 +25,7 @@
         @click="bukaDialog()"
         class="bg-sky-500 md:shadow-lg dark:bg-slate-900 text-white w-full block text-center md:px-3 py-2 rounded-full md:text-sm"
       >
-        {{lang.ks[lokasi]}}
+        {{ lang.ks[lokasi] }}
       </button>
     </div>
     <!-- Modal Social -->
@@ -36,16 +36,6 @@
       aria-modal="true"
       :class="open1 ? 'block' : 'hidden'"
     >
-      <!--
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  -->
       <div
         class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity delay-100"
         :class="
@@ -59,16 +49,6 @@
         <div
           class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0"
         >
-          <!--
-        Modal panel, show/hide based on modal state.
-
-        Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-        Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-      -->
           <div
             class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full delay-100"
             :class="
@@ -100,20 +80,21 @@
                     class="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
                   >
-                    {{lang.ks[lokasi]}}
+                    {{ lang.ks[lokasi] }}
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      {{lang.ucan[lokasi]}}
+                      {{ lang.ucan[lokasi] }}
                     </p>
                   </div>
                   <div class="mt-4 flex gap-3 justify-center">
-                    <a v-for="dt in sosmed"
+                    <a
+                      v-for="dt in sosmed"
                       :href="dt[1]"
                       target="_blank"
                       class="bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-300 active:bg-gray-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white"
                     >
-                      {{dt[0]}}
+                      {{ dt[0] }}
                     </a>
                   </div>
                 </div>
@@ -127,7 +108,7 @@
                 @click="tutupDialog()"
                 class="mt-3 w-full inline-flex justify-center rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                {{lang.btn.close[lokasi]}}
+                {{ lang.btn.close[lokasi] }}
               </button>
             </div>
           </div>
@@ -167,9 +148,9 @@ export default defineComponent({
       open: false,
       open1: false,
       sosmed: [
-        ['E-mail','mailto:me@rizkykr'],
-        ['Github','https://github.com/rizkykurniawanritonga'],
-        ['Codepen','https://codepen.io/rizkykurniawanritonga']
+        ["E-mail", "mailto:me@rizkykr"],
+        ["Github", "https://github.com/rizkykurniawanritonga"],
+        ["Codepen", "https://codepen.io/rizkykurniawanritonga"],
       ],
       pesan: [],
       pesancur: 0,
@@ -178,18 +159,18 @@ export default defineComponent({
         '<span class="flex gap-2 px-1 py-2"><span class="flex md:h-2 md:w-2 h-1 w-1 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-2 md:w-2 h-1 w-1 bg-gray-500"></span></span><span class="flex md:h-2 md:w-2 h-1 w-1 relative"><span class="animate-ping animation-delay-200 absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-2 md:w-2 h-1 w-1 bg-gray-500"></span></span><span class="flex md:h-2 md:w-2 h-1 w-1 relative"><span class="animate-ping animation-delay-400 absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span><span class="relative inline-flex rounded-full md:h-2 md:w-2 h-1 w-1 bg-gray-500"></span></span></span>',
       lang: {
         ks: {
-          id: 'Kontak Saya',
-          en: 'Contact me'
+          id: "Kontak Saya",
+          en: "Contact me",
         },
         ucan: {
-          id: 'Anda dapat menghubungi saya dengan cara berikut:',
-          en: 'You can contact me in the following way:'
+          id: "Anda dapat menghubungi saya dengan cara berikut:",
+          en: "You can contact me in the following way:",
         },
         btn: {
           close: {
-            id: 'Tutup',
-            en: 'Close'
-          }
+            id: "Tutup",
+            en: "Close",
+          },
         },
         messages: {
           id: [
