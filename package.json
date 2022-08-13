@@ -1,6 +1,6 @@
 {
   "name": "web-rizky",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -13,6 +13,7 @@
     "nuxt": "3.0.0-rc.6"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "tailwindcss-animation-delay": "^1.0.7"
   }
 }

@@ -22,7 +22,7 @@
       class="md:fixed md:bottom-3 md:right-3 dark:bg-slate-800 md:p-0 p-2 md:mt-0 mt-1 md:shadow-none shadow-2xl"
     >
       <button
-        @click="open1 = true"
+        @click="bukamodal"
         class="bg-sky-500 md:shadow-lg dark:bg-slate-900 text-white w-full block text-center md:px-3 py-2 rounded-full md:text-sm"
       >
         {{ lang.ks[lokasi] }}
@@ -47,7 +47,7 @@
 
       <div class="fixed z-10 inset-0 overflow-y-auto">
         <div
-          class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0"
+          class="flex items-center justify-center min-h-full p-4 text-center sm:p-0"
         >
           <div
             class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full delay-100"
@@ -105,7 +105,7 @@
             >
               <button
                 type="button"
-                @click="open1 = false"
+                @click="tutupmodal"
                 class="mt-3 w-full inline-flex justify-center rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
                 {{ lang.btn.close[lokasi] }}
@@ -118,16 +118,11 @@
   </div>
 </template>
 <script>
+import _ from "lodash";
 export default defineComponent({
   async setup() {
     function hanyaCode(txt) {
-      return txt
-        .split(",")[2]
-        .replace("}", "")
-        .split(":")[1]
-        .split('"')
-        .join("")
-        .toLocaleLowerCase();
+      return _.lowerCase(_.last(_.toArray(JSON.parse(txt))));
     }
     const [{ data: lokasi }] = await Promise.all([
       useFetch(`https://api.myip.com`, {
@@ -193,26 +188,31 @@ export default defineComponent({
       },
     };
   },
-  watch:{
-    open1(bl){
-      setTimeout(() => {
-        this.open = bl
-      }, bl ? 200 : 300);
-    }
-  },
   methods: {
+    bukamodal(){
+      this.open1 = true;
+      _.delay(function (e) {
+        e.open = true;
+      },100,this);
+    },
+    tutupmodal(){
+      this.open = false;
+      _.delay(function (e) {
+        e.open1 = false;
+      },300,this);
+    },
     kirimPesan() {
       const lg = this.lokasi;
       const datapesan = this.lang.messages[lg == "id" ? lg : "en"];
-      if (this.pesancur < datapesan.length) {
+      if (_.lt(this.pesancur, datapesan.length)) {
         this.pesan.push(this.loadingText);
-        setTimeout(() => {
-          this.pesan[this.pesancur] = datapesan[this.pesancur];
-          this.pesancur = this.pesancur + 1;
-          setTimeout(() => {
-            this.kirimPesan();
-          }, 1000);
-        }, datapesan[this.pesancur].replace(/<(?:.|\n)*?>/gm, "").length * this.typingSpeed + 500);
+        _.delay(function (e) {
+          e.pesan[e.pesancur] = datapesan[e.pesancur];
+          e.pesancur++;
+          _.delay(function (f) {
+            f.kirimPesan();
+          },1000,e);
+          },_.size(datapesan[this.pesancur]) * this.typingSpeed + 500,this);
       }
     },
     getCurTime() {
@@ -224,7 +224,9 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.kirimPesan();
+    _.defer(function (e) {
+      e.kirimPesan();
+    }, this);
   },
 });
 </script>
