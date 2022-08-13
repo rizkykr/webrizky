@@ -22,7 +22,7 @@
       class="md:fixed md:bottom-3 md:right-3 dark:bg-slate-800 md:p-0 p-2 md:mt-0 mt-1 md:shadow-none shadow-2xl"
     >
       <button
-        @click="bukaDialog()"
+        @click="open1 = true"
         class="bg-sky-500 md:shadow-lg dark:bg-slate-900 text-white w-full block text-center md:px-3 py-2 rounded-full md:text-sm"
       >
         {{ lang.ks[lokasi] }}
@@ -105,7 +105,7 @@
             >
               <button
                 type="button"
-                @click="tutupDialog()"
+                @click="open1 = false"
                 class="mt-3 w-full inline-flex justify-center rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
                 {{ lang.btn.close[lokasi] }}
@@ -193,19 +193,14 @@ export default defineComponent({
       },
     };
   },
+  watch:{
+    open1(bl){
+      setTimeout(() => {
+        this.open = bl
+      }, bl ? 200 : 300);
+    }
+  },
   methods: {
-    bukaDialog() {
-      this.open1 = true;
-      setTimeout(() => {
-        this.open = true;
-      }, 10);
-    },
-    tutupDialog() {
-      this.open = false;
-      setTimeout(() => {
-        this.open1 = false;
-      }, 300);
-    },
     kirimPesan() {
       const lg = this.lokasi;
       const datapesan = this.lang.messages[lg == "id" ? lg : "en"];
