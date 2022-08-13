@@ -3,21 +3,7 @@
     ref="message"
     class="apppesan fixed top-0 h-full w-screen flex flex-col md:justify-start justify-end"
   >
-    <Head>
-      <Meta property="og:site_name" content="rizkykr.com" />
-      <Meta property="og:title" content="RizkyKR" />
-      <Meta
-        property="og:description"
-        content="I design and code things on the web."
-      />
-      <Meta property="og:type" content="website" />
-      <Meta property="og:url" content="https://www.rizkykr.com" />
-      <Meta property="og:image" content="/img/og-image.png" />
-      <Meta property="og:image:type" content="image/png" />
-      <Meta property="og:image:width" content="768" />
-      <Meta property="og:image:height" content="416" />
-    </Head>
-    <BubbleChat v-for="txt in pesan" v-html="txt" />
+    <LazyBubbleChat v-for="txt in pesan" v-html="txt" />
     <div
       class="md:fixed md:bottom-3 md:right-3 dark:bg-slate-800 md:p-0 p-2 md:mt-0 mt-1 md:shadow-none shadow-2xl"
     >
