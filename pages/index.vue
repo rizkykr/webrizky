@@ -189,13 +189,13 @@ export default defineComponent({
     };
   },
   methods: {
-    bukamodal(){
+    bukamodal: function (event){
       this.open1 = true;
       _.delay(function (e) {
         e.open = true;
       },100,this);
     },
-    tutupmodal(){
+    tutupmodal: function (event){
       this.open = false;
       _.delay(function (e) {
         e.open1 = false;
