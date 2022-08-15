@@ -1,9 +1,9 @@
 <template>
   <span
-    class="relative rounded-full last-of-type:rounded-bl-none transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 first:mt-4 last:mb-4 md:text-base text-sm antialiased font-sans"
+    class="relative animate__animated rounded-full last-of-type:rounded-bl-none transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 first:mt-4 last:mb-4 md:text-base text-sm antialiased font-sans"
     :class="
       type == 'loading'
-        ? 'md:py-3 py-2 md:px-6 px-4'
+        ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
         : 'md:py-3 py-2 md:pl-6 pl-4 pr-14'
     "
     v-if="type != 'img'"
@@ -15,7 +15,10 @@
       >{{ waktu }}</span
     >
   </span>
-  <div class="stikernye text-right w-fit" v-else>
+  <div
+    class="stikernye text-right w-fit animate__animated animate__fadeInUp"
+    v-else
+  >
     <nuxt-img
       :src="content"
       loading="lazy"
