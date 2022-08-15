@@ -10,10 +10,11 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^5.3.1",
-    "nuxt": "3.0.0-rc.6"
+    "nuxt": "^3.0.0-rc.8"
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "tailwindcss-animation-delay": "^1.0.7"
+    "tailwindcss-animation-delay": "^1.0.7",
+    "vanilla-lazyload": "^17.8.3"
   }
 }
