@@ -4,7 +4,7 @@ import { defineNuxtConfig } from "nuxt";
 export default defineNuxtConfig({
   dev: false,
   nitro: {
-    preset: 'node-server'
+    preset: "node-server",
   },
   app: {
     buildAssetsDir: "/apps/",
@@ -32,5 +32,5 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image-edge"],
 });

@@ -1,32 +1,34 @@
 <template>
-  <ClientOnly>
-    <div class="outeerapp flex flex-col fixed top-0 h-full w-screen">
-      <div class="apppesan flex flex-1 flex-col md:justify-start justify-end">
-        <LazyBubbleChat
-          v-for="(dt, i) in pesan"
-          :type="dt.type"
-          :content="dt.content"
-        />
-      </div>
-      <div
-        class="md:fixed md:bottom-3 md:left-3 dark:bg-slate-800 md:p-0 p-3 md:mt-0 mt-1 md:shadow-none shadow-2xl md:border-t-0 border-t border-gray-300/30"
-      >
-        <button
-          @click="bukaDialog"
-          class="bg-sky-600 dark:bg-sky-900 md:shadow-lg text-white w-full block text-center md:px-3 py-2 rounded-full text-sm"
-        >
-          {{ lang.ks[lokasi] }}
-        </button>
-      </div>
-      <LazyDialogSosmed
-        :lang="lang"
-        :show="showDialog"
-        :sosmed="sosmed"
-        :lokasi="lokasi"
-        @tutup="showDialog = false"
+  <div
+    class="outeerapp flex flex-col fixed top-0 h-full w-screen overflow-auto"
+  >
+    <div
+      class="apppesan flex flex-1 flex-col md:justify-start justify-end mb-14"
+    >
+      <LazyBubbleChat
+        v-for="(dt, i) in pesan"
+        :type="dt.type"
+        :content="dt.content"
       />
     </div>
-  </ClientOnly>
+    <div
+      class="fixed md:bottom-3 bottom-0 md:w-auto w-full md:left-3 backdrop-blur-md bg-white/30 dark:bg-slate-800 md:p-0 p-3 md:mt-0 mt-1 md:shadow-none shadow-2xl md:border-t-0 border-t border-gray-300/30"
+    >
+      <button
+        @click="bukaDialog"
+        class="bg-sky-600 dark:bg-sky-900 md:shadow-lg text-white w-full block text-center md:px-3 py-2 rounded-full text-sm"
+      >
+        {{ lang.ks[lokasi] }}
+      </button>
+    </div>
+    <LazyDialogSosmed
+      :lang="lang"
+      :show="showDialog"
+      :sosmed="sosmed"
+      :lokasi="lokasi"
+      @tutup="showDialog = false"
+    />
+  </div>
 </template>
 <script>
 import _ from "lodash";
@@ -80,7 +82,7 @@ export default defineComponent({
             "Halo, Assalamualaikum 👋",
             "Saya Rizky",
             "Saya mendesain dan membuat kode apapun di web.",
-            `Saya saat ini sedang menerima pekerjaan freelance.<br> Bisa menghubungi saya pada tombol Kontak saya.`,
+            `Saya saat ini sedang menerima pekerjaan freelance. Bisa menghubungi saya pada tombol Kontak saya.`,
             this.getCurTime(),
             "👀 R.",
             "/img/blink.gif",
@@ -90,7 +92,7 @@ export default defineComponent({
             "Hey there 👋",
             "I'm Rizky",
             "I design and code things on the web",
-            `I\'m currently accepting freelance work.<br> You can contact me via the Contact me button.`,
+            `I\'m currently accepting freelance work. You can contact me via the Contact me button.`,
             this.getCurTime(),
             "👀 R.",
             "/img/blink.gif",
@@ -118,7 +120,7 @@ export default defineComponent({
               content: datapesan[e.pesancur],
             };
             e.pesan[e.pesancur] = dt;
-            console.log(dt);
+            // console.log(dt);
             e.pesancur++;
             _.delay(
               function (f) {

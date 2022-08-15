@@ -1,6 +1,6 @@
 {
   "name": "web-rizky",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -9,12 +9,12 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "@nuxt/image-edge": "^1.0.0-27657146.da85542",
     "@nuxtjs/tailwindcss": "^5.3.1",
     "nuxt": "^3.0.0-rc.8"
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "tailwindcss-animation-delay": "^1.0.7",
-    "vanilla-lazyload": "^17.8.3"
+    "tailwindcss-animation-delay": "^1.0.7"
   }
 }

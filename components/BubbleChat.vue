@@ -16,8 +16,9 @@
     >
   </span>
   <div class="stikernye text-right w-fit" v-else>
-    <img
-      :data-src="content"
+    <nuxt-img
+      :src="content"
+      loading="lazy"
       class="lazy mb-2 md:mx-4 mx-3 first:mt-4 last:mb-4 md:w-44 w-36"
     />
     <span
@@ -27,25 +28,7 @@
     >
   </div>
 </template>
-<style>
-img.lazy {
-  opacity: 0;
-}
-img:not(.initial) {
-  transition: opacity 1s;
-}
-img.initial,
-img.loaded,
-img.error {
-  opacity: 1;
-}
-
-img:not([src]) {
-  visibility: hidden;
-}
-</style>
 <script>
-import LazyLoad from "vanilla-lazyload";
 export default {
   name: "Chat",
   data() {
@@ -72,7 +55,6 @@ export default {
     },
   },
   mounted() {
-    var lazyLoadInstance = new LazyLoad();
     this.waktuahh();
   },
 };
