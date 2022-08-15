@@ -18,14 +18,14 @@
         @click="bukaDialog"
         class="bg-sky-600 dark:bg-sky-900 md:shadow-lg text-white w-full block text-center md:px-3 py-2 rounded-full text-sm"
       >
-        {{ lang.ks[lokasi] }}
+        {{ lang.ks[loc] }}
       </button>
     </div>
     <LazyDialogSosmed
       :lang="lang"
       :show="showDialog"
       :sosmed="sosmed"
-      :lokasi="lokasi"
+      :lokasi="loc"
       @tutup="showDialog = false"
     />
   </div>
@@ -34,12 +34,9 @@
 import _ from "lodash";
 export default defineComponent({
   async setup() {
-    function hanyaCode(txt) {
-      return _.lowerCase(_.last(_.toArray(JSON.parse(txt))));
-    }
     const [{ data: lokasi }] = await Promise.all([
       useFetch(`https://api.myip.com`, {
-        parseResponse: (txt) => hanyaCode(txt),
+        parseResponse: (txt) => _.lowerCase(_.last(_.toArray(JSON.parse(txt)))),
       }),
     ]);
     return { lokasi };
@@ -54,11 +51,12 @@ export default defineComponent({
     return {
       showDialog: false,
       sosmed: [
-        ["E-mail", "mailto:me@rizkykr"],
+        ["E-mail", "mailto:me@rizkykr.com"],
         ["Github", "https://github.com/rizkykurniawanritonga"],
         ["Codepen", "https://codepen.io/rizkykurniawanritonga"],
       ],
       pesan: [],
+      loc: "en",
       pesancur: 0,
       typingSpeed: 20,
       lang: {
@@ -106,8 +104,7 @@ export default defineComponent({
       this.showDialog = true;
     },
     kirimPesan() {
-      const lg = this.lokasi;
-      const datapesan = this.lang.messages[lg == "id" ? lg : "en"];
+      const datapesan = this.lang.messages[this.loc];
       if (_.lt(this.pesancur, datapesan.length)) {
         this.pesan.push({
           type: "loading",
@@ -144,6 +141,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.loc = this.lokasi;
     _.defer(function (e) {
       e.kirimPesan();
     }, this);
