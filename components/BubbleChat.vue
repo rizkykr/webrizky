@@ -16,7 +16,7 @@
     >
   </span>
   <div
-    class="stikernye text-right w-fit animate__animated animate__faster animate__fadeInUp"
+    class="stikernye text-right w-fit animate__animated animate__faster animate__fadeIn"
     v-else
   >
     <nuxt-img

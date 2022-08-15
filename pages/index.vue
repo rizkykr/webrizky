@@ -35,14 +35,16 @@ import _ from "lodash";
 export default defineComponent({
   async setup() {
     const [{ data: lokasi }] = await Promise.all([
-      useFetch(`https://api.myip.com`, {
-        parseResponse: (txt) => _.lowerCase(_.last(_.toArray(JSON.parse(txt)))),
+      useFetch(`/?token=${useRuntimeConfig().apiSecret}`, {
+        baseURL: useRuntimeConfig().apiBase,
+        pick: ["city", "region", "country", "loc", "org", "timezone"],
+        parseResponse: JSON.parse,
       }),
     ]);
     return { lokasi };
   },
   head: {
-    title: "RizkyKR - Web Fullstack Developer",
+    title: `RizkyKR - Web Fullstack Developer`,
     bodyAttrs: {
       class: "bg-slate-50 dark:bg-slate-900",
     },
@@ -141,7 +143,8 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loc = this.lokasi;
+    console.log(this.lokasi);
+    this.loc = _.lowerCase(this.lokasi.country);
     _.defer(function (e) {
       e.kirimPesan();
     }, this);
