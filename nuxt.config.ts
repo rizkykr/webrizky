@@ -7,8 +7,8 @@ export default defineNuxtConfig({
     preset: "node-server",
   },
   runtimeConfig: {
-    apiSecret: "", // can be overridden by NUXT_API_SECRET environment variable
-    apiBase: "", // can be overridden by NUXT_API_BASE environment variable
+    apiSecret: process.env.API_TOKEN || "", // can be overridden by NUXT_API_SECRET environment variable
+    apiBase: process.env.API_BASE_URL || "", // can be overridden by NUXT_API_BASE environment variable
   },
   app: {
     buildAssetsDir: "/apps/",
