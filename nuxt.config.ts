@@ -37,5 +37,5 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/scss/main.scss"],
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image-edge"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image-edge", "@vueuse/nuxt"],
 });

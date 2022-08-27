@@ -1,14 +1,14 @@
 <template>
   <!-- Modal Social -->
   <div
-    class="relative z-10"
+    class="relative z-30"
     aria-labelledby="modal-title"
     role="dialog"
     aria-modal="true"
     :class="open1 ? 'block' : 'hidden'"
   >
     <div
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity delay-100"
+      class="fixed inset-0 bg-black bg-opacity-75 transition-opacity delay-100"
       :class="
         open
           ? 'opacity-100 ease-out duration-300'
@@ -21,6 +21,7 @@
         class="flex items-center justify-center min-h-full p-4 text-center sm:p-0"
       >
         <div
+          ref="modals"
           class="relative bg-white dark:bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full delay-100"
           :class="
             open
@@ -58,7 +59,9 @@
                     {{ lang.ucan[lokasi] }}
                   </p>
                 </div>
-                <div class="mt-4 flex md:flex-row flex-col gap-3 justify-center">
+                <div
+                  class="mt-4 flex md:flex-row flex-col gap-3 md:justify-start justify-center"
+                >
                   <a
                     v-for="dt in sosmed"
                     :href="dt[1]"
@@ -71,7 +74,9 @@
               </div>
             </div>
           </div>
-          <div class="bg-gray-50 dark:bg-slate-900 px-4 py-4 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div
+            class="bg-gray-50 dark:bg-slate-900 px-4 py-4 sm:px-6 sm:flex sm:flex-row-reverse"
+          >
             <button
               type="button"
               @click="tutupmodal"
@@ -86,6 +91,7 @@
   </div>
 </template>
 <script>
+import { onClickOutside } from "@vueuse/core";
 import _ from "lodash";
 export default {
   data() {
@@ -106,7 +112,7 @@ export default {
     },
   },
   methods: {
-    bukamodal(){
+    bukamodal() {
       this.open1 = true;
       _.delay(
         function (e) {
@@ -116,7 +122,7 @@ export default {
         this
       );
     },
-    tutupmodal(){
+    tutupmodal() {
       this.open = false;
       _.delay(
         function (e) {
@@ -127,6 +133,11 @@ export default {
         this
       );
     },
+  },
+  mounted() {
+    onClickOutside(this.$refs.modals, (event) => {
+      this.$emit("tutup");
+    });
   },
 };
 </script>

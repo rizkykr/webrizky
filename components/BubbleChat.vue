@@ -1,37 +1,52 @@
 <template>
-  <span
-    class="relative animate__animated animate__faster rounded-full last-of-type:rounded-bl-none duration-700 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 first:mt-4 last:mb-4 md:text-base text-sm antialiased font-sans"
-    :class="
-      type == 'loading'
-        ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
-        : 'md:py-3 py-2 md:pl-6 pl-4 pr-14'
-    "
+  <div
+    class="chat-list flex first:mt-4 last:mb-4"
+    :class="pos == 'left' ? 'justify-start mr-8' : 'ml-8 justify-end'"
     v-if="type != 'img'"
   >
-    <span v-html="type == 'txt' ? content : loadingText"></span
-    ><span
-      class="ml-4 absolute right-5 bottom-1 opacity-50 text-xs"
-      v-show="type != 'loading'"
-      >{{ waktu }}</span
+    <span
+      class="relative select-none animate__animated animate__faster rounded-2xl duration-700 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
+      :class="[
+        type == 'loading'
+          ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
+          : 'md:py-3 py-2 md:pl-6 pl-4 pr-14',
+      ]"
     >
-  </span>
+      <span
+        v-html="type == 'txt' ? content : loadingText"
+        :class="kontain(content, '/') && type == 'txt' && 'text-sky-500'"
+      ></span
+      ><span
+        class="ml-4 absolute right-4 bottom-1 opacity-50 text-xs"
+        v-show="type != 'loading'"
+        >{{ waktu }}</span
+      >
+    </span>
+  </div>
   <div
-    class="stikernye text-right w-fit animate__animated animate__slow animate__fadeIn"
+    class="stikernye flex first:mt-4 last:mb-4"
+    :class="pos == 'left' ? 'justify-start' : 'justify-end'"
     v-else
   >
-    <nuxt-img
-      :src="content"
-      loading="lazy"
-      class="lazy mb-2 md:mx-4 mx-3 first:mt-4 last:mb-4 md:w-44 w-36"
-    />
-    <span
-      class="bg-black py-1 px-3 relative -top-4 rounded-full text-white opacity-20 text-xs"
-      v-show="type != 'loading'"
-      >{{ waktu }}</span
+    <div
+      class="stikernye w-fit animate__animated animate__slow animate__fadeIn"
+      :class="pos == 'left' ? 'text-right' : 'text-left'"
     >
+      <nuxt-img
+        :src="content"
+        loading="lazy"
+        class="lazy mb-2 md:mx-4 mx-3 md:w-44 w-36"
+      />
+      <span
+        class="bg-black py-1 px-3 relative -top-4 rounded-full text-white opacity-20 text-xs"
+        v-show="type != 'loading'"
+        >{{ waktu }}</span
+      >
+    </div>
   </div>
 </template>
 <script>
+import _ from "lodash";
 export default {
   name: "Chat",
   data() {
@@ -44,8 +59,15 @@ export default {
   props: {
     type: String,
     content: String,
+    pos: {
+      type: String,
+      default: "left",
+    },
   },
   methods: {
+    kontain(vl, chk) {
+      return _.includes(vl, chk);
+    },
     waktuahh() {
       const checkTime = function (i) {
         if (i < 10) {
