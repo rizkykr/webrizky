@@ -15,13 +15,13 @@
     </div>
     <div
       ref="chatEntry"
-      class="fixed z-20 flex gap-3 md:rounded-full md:bottom-3 bottom-0 md:w-1/4 w-full md:left-3 backdrop-blur-md bg-white/60 dark:bg-slate-800 md:p-0 p-2 md:mt-0 mt-1 md:border border-t dark:border-gray-300/30 border-gray-300"
+      class="fixed z-20 flex gap-3 md:rounded-full md:bottom-3 bottom-0 md:w-1/4 w-full md:left-3 backdrop-blur-md bg-white/60 dark:bg-slate-800 md:!p-0 px-2 py-1 md:mt-0 mt-1 md:border border-t dark:border-gray-300/30 border-gray-300"
     >
       <button
         @click="bukaDialog"
-        class="bg-sky-600 dark:bg-sky-900 text-white text-center px-3 py-2 rounded-full text-sm flex-none"
+        class="text-sky-600 text-center px-3 py-2 rounded-full text-sm flex-none"
       >
-        <i class="bx bx-envelope text-xl align-middle"></i>
+        <i class="bx bx-envelope align-middle text-2xl"></i>
         <span class="hidden">{{ lang.ks[loc] }}</span>
       </button>
       <form
@@ -79,13 +79,13 @@
 </template>
 <script>
 import _ from "lodash";
-import { useElementSize, useToggle } from "@vueuse/core";
+import { useElementSize, useToggle, useTimeoutFn } from "@vueuse/core";
 export default defineComponent({
   async setup() {
     const [{ data: lokasi }] = await Promise.all([
       useFetch(`/?token=${useRuntimeConfig().apiSecret}`, {
         baseURL: useRuntimeConfig().apiBase,
-        pick: ["city", "region", "country", "loc", "org", "timezone"],
+        pick: ["country"],
         parseResponse: JSON.parse,
       }),
     ]);
@@ -102,22 +102,14 @@ export default defineComponent({
     teksType(vl) {
       if (vl) {
         this.showSendBtn = true;
-        _.delay(
-          function (f) {
-            f.showSendBtnAnim = true;
-          },
-          50,
-          this
-        );
+        useTimeoutFn(() => {
+          this.showSendBtnAnim = true;
+        }, 100);
       } else {
         this.showSendBtnAnim = false;
-        _.delay(
-          function (f) {
-            f.showSendBtn = false;
-          },
-          50,
-          this
-        );
+        useTimeoutFn(() => {
+          this.showSendBtn = false;
+        }, 100);
       }
     },
   },
@@ -195,27 +187,19 @@ export default defineComponent({
           content: "loading",
           pos: "left",
         });
-        _.delay(
-          function (e) {
-            const dt = {
-              type: _.includes(datapesan[e.pesancur], ".gif") ? "img" : "txt",
-              content: datapesan[e.pesancur],
-              pos: "left",
-            };
-            e.pesan[e.pesancur] = dt;
-            // console.log(dt);
-            e.pesancur++;
-            _.delay(
-              function (f) {
-                f.chatPerkenalanAwal();
-              },
-              1000,
-              e
-            );
-          },
-          _.size(datapesan[this.pesancur]) * this.typingSpeed + 500,
-          this
-        );
+        useTimeoutFn(() => {
+          const dt = {
+            type: _.includes(datapesan[this.pesancur], ".gif") ? "img" : "txt",
+            content: datapesan[this.pesancur],
+            pos: "left",
+          };
+          this.pesan[this.pesancur] = dt;
+          // console.log(dt);
+          this.pesancur++;
+          useTimeoutFn(() => {
+            this.chatPerkenalanAwal();
+          }, 1000);
+        }, _.size(datapesan[this.pesancur]) * this.typingSpeed + 500);
       }
     },
     kirimPesan(psn, chtdir = "left") {
@@ -227,32 +211,23 @@ export default defineComponent({
             pos: chtdir,
           });
         const cur = _.size(this.pesan);
-        _.delay(
-          function (e) {
-            const dt = {
-              type: _.includes(psn, ".gif") ? "img" : "txt",
-              content: psn,
-              pos: chtdir,
-            };
-            e.pesan[cur - (chtdir == "left" ? 1 : 0)] = dt;
-            chtdir != "left" && (e.AIChat(psn), (e.teksType = ""));
-            document.body.scrollTop = document.body.scrollHeight;
-          },
-          _.size(psn) * this.typingSpeed + (chtdir == "left" ? 500 : 100),
-          this
-        );
+        useTimeoutFn(() => {
+          const dt = {
+            type: _.includes(psn, ".gif") ? "img" : "txt",
+            content: psn,
+            pos: chtdir,
+          };
+          this.pesan[cur - (chtdir == "left" ? 1 : 0)] = dt;
+          chtdir != "left" && (this.AIChat(psn), (this.teksType = ""));
+        }, _.size(psn) * this.typingSpeed + (chtdir == "left" ? 500 : 100));
       }
     },
     AIChat(vl) {
-      _.delay(
-        function (e) {
-          e.kirimPesan(
-            `Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.`
-          );
-        },
-        _.size(vl) * this.typingSpeed + 500,
-        this
-      );
+      useTimeoutFn(() => {
+        this.kirimPesan(
+          `Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.`
+        );
+      }, _.size(vl) * this.typingSpeed + 500);
     },
     getCurTime() {
       var date = new Date(),
@@ -266,9 +241,9 @@ export default defineComponent({
     const { width, height } = useElementSize(this.$refs.chatEntry);
     this.pbtmBtCht = height;
     this.loc = _.lowerCase(this.lokasi.country);
-    _.defer(function (e) {
-      e.chatPerkenalanAwal();
-    }, this);
+    useTimeoutFn(() => {
+      this.chatPerkenalanAwal();
+    }, 100);
   },
 });
 </script>

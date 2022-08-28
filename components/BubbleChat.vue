@@ -5,11 +5,11 @@
     v-if="type != 'img'"
   >
     <span
-      class="relative select-none animate__animated animate__faster rounded-2xl duration-700 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
+      class="relative select-none animate__animated animate__faster rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
       :class="[
         type == 'loading'
           ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
-          : 'md:py-3 py-2 md:pl-6 pl-4 pr-14',
+          : 'md:py-3 py-2 md:pl-6 pl-4 pr-14 animate__bounceIn',
       ]"
     >
       <span
@@ -29,7 +29,7 @@
     v-else
   >
     <div
-      class="stikernye w-fit animate__animated animate__slow animate__fadeIn"
+      class="stikernye w-fit animate__animated animate__faster animate__bounceIn"
       :class="pos == 'left' ? 'text-right' : 'text-left'"
     >
       <nuxt-img
