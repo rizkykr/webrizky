@@ -89,26 +89,17 @@ export default defineComponent({
         kontak: { psn: "function(bukaDialog)" },
         portofolio: {
           psn: "{BOT}Berikut adalah portofolio saya.",
-          media: [
-            "https://i.imgur.com/fsyrScY.jpg",
-            "https://miro.medium.com/fit/c/88/88/0*B5C9zq5pIfa5tXv3.jpg",
-            "https://i.imgur.com/fsyrScY.jpg",
-            "https://miro.medium.com/fit/c/88/88/0*B5C9zq5pIfa5tXv3.jpg",
-            "https://i.imgur.com/fsyrScY.jpg",
-            "https://miro.medium.com/fit/c/88/88/0*B5C9zq5pIfa5tXv3.jpg",
-            "https://i.imgur.com/fsyrScY.jpg",
-            "https://miro.medium.com/fit/c/88/88/0*B5C9zq5pIfa5tXv3.jpg",
-            "https://i.imgur.com/fsyrScY.jpg",
-            "https://miro.medium.com/fit/c/88/88/0*B5C9zq5pIfa5tXv3.jpg",
-          ],
+          media: ["/img/web.jpg"],
         },
         pacar: [
           { psn: "Tentunya ada dongg." },
           {
-            psn: "Ini diaaaa 💕",
+            psn: "Ini diaaaa 💕💕",
             media: ["/img/ayang.jpg"],
           },
-          { psn: "Doain yaa soon langkahnya dipermudah" },
+          {
+            psn: "Doain yaa dalam waktu dekat ini semoga langkahnya dipermudah 😄",
+          },
         ],
       },
     };
@@ -242,7 +233,7 @@ export default defineComponent({
   >
     <div class="pesanApp flex items-center justify-center h-full select-none">
       <div
-        class="bg-white my-5 shadow rounded-xl p-3 md:max-w-md max-w-xs md:text-base text-sm"
+        class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white my-5 shadow rounded-xl p-3 md:max-w-md max-w-xs md:text-base text-sm"
       >
         <span class="font-semibold">Apa yang dapat dilakukan disini?</span>
         <p>
