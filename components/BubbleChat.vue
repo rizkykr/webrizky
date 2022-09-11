@@ -1,30 +1,62 @@
 <template>
   <div
-    class="chat-list flex first:mt-4 last:mb-4"
-    :class="pos == 'left' ? 'justify-start mr-8' : 'ml-8 justify-end'"
-    v-if="type != 'img'"
+    class="bg-black flex-shrink-0 mx-auto text-white !opacity-20 rounded-2xl px-3 my-3 text-sm animate__animated animate__faster animate__fadeInUp"
+    v-if="pos == 'info'"
+  >
+    {{ content }}
+  </div>
+  <div
+    class="chat-list flex last:md:mb-3"
+    :class="pos == 'left' ? 'justify-start mr-14' : 'ml-14 justify-end'"
+    v-else-if="type != 'img'"
   >
     <span
-      class="relative select-none animate__animated animate__faster rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
+      class="relative select-none animate__animated animate__faster rounded-2xl ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
       :class="[
         type == 'loading'
           ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
-          : 'md:py-3 py-2 md:pl-6 pl-4 pr-14 animate__bounceIn',
+          : `md:py-3 py-2 md:pl-6 pl-4 ${
+              isBot(content, `bolean`) ? 'pr-16' : 'pr-14'
+            } animate__bounceIn`,
+        pos == 'right'
+          ? 'bg-gradient-to-r from-sky-500 to-indigo-500 text-white'
+          : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white',
       ]"
     >
-      <span
-        v-html="type == 'txt' ? content : loadingText"
-        :class="kontain(content, '/') && type == 'txt' && 'text-sky-500'"
-      ></span
+      <div
+        class="mediachat -ml-2 md:mb-3 mb-2 gap-2"
+        :class="
+          media.length == 1
+            ? '-mr-12 grid-cols-1'
+            : 'md:-mr-12 -mr-14 grid-cols-2'
+        "
+        v-if="media.length > 0 && pos == 'left' && type != 'loading'"
+      >
+        <div v-for="dti in media" class="galery relative overflow-hidden">
+          <a
+            :href="dti"
+            target="_blank"
+            class="hoverzoom rounded-xl absolute inset-0 flex justify-center items-center bg-black text-white md:text-3xl text-2xl z-10 opacity-0 hover:opacity-80 transition-opacity cursor-pointer"
+            ><i class="bx bx-search-alt"></i
+          ></a>
+          <img
+            :data-src="dti"
+            class="lazyload rounded-xl w-full h-full max-w-xs"
+            alt=""
+          />
+        </div>
+      </div>
+      <span v-html="type == 'txt' ? isBot(content) : loadingText"></span
       ><span
-        class="ml-4 absolute right-4 bottom-1 opacity-50 text-xs"
+        class="absolute right-4 bottom-1 opacity-50 text-xs"
         v-show="type != 'loading'"
+        ><i class="bx bx-bot mr-0.5" v-if="isBot(content, `bolean`)"></i
         >{{ waktu }}</span
       >
     </span>
   </div>
   <div
-    class="stikernye flex first:mt-4 last:mb-4"
+    class="stikernye flex"
     :class="pos == 'left' ? 'justify-start' : 'justify-end'"
     v-else
   >
@@ -32,10 +64,9 @@
       class="stikernye w-fit animate__animated animate__faster animate__bounceIn"
       :class="pos == 'left' ? 'text-right' : 'text-left'"
     >
-      <nuxt-img
-        :src="content"
-        loading="lazy"
-        class="lazy mb-2 md:mx-4 mx-3 md:w-44 w-36"
+      <img
+        :data-src="content"
+        class="lazyload mb-2 md:mx-4 mx-3 md:w-44 w-36"
       />
       <span
         class="bg-black py-1 px-3 relative -top-4 rounded-full text-white opacity-20 text-xs"
@@ -45,8 +76,20 @@
     </div>
   </div>
 </template>
+<style>
+.lazyload,
+.lazyloading {
+  opacity: 0;
+}
+.lazyloaded {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+</style>
 <script>
 import _ from "lodash";
+import "lazysizes";
+import "lazysizes/plugins/parent-fit/ls.parent-fit";
 export default {
   name: "Chat",
   data() {
@@ -63,10 +106,14 @@ export default {
       type: String,
       default: "left",
     },
+    media: {
+      type: Array,
+      default: [],
+    },
   },
   methods: {
-    kontain(vl, chk) {
-      return _.includes(vl, chk);
+    isBot(vl, st = "text") {
+      return st == "text" ? _.replace(vl, "{BOT}", "") : kontain(vl, "{BOT}");
     },
     waktuahh() {
       const checkTime = function (i) {
