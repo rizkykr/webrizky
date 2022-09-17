@@ -6,9 +6,6 @@ export default defineNuxtConfig({
   server: {
     port: 3020,
   },
-  nitro: {
-    preset: "node-server",
-  },
   runtimeConfig: {
     apiSecret: process.env.API_TOKEN || "", // can be overridden by NUXT_API_SECRET environment variable
     apiBase: process.env.API_BASE_URL || "", // can be overridden by NUXT_API_BASE environment variable
@@ -40,5 +37,10 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/scss/main.scss"],
-  modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt"],
+  modules: ["@vueuse/nuxt"],
+  build: {
+    postcss: {
+      postcssOptions: require("./postcss.config.js"),
+    },
+  },
 });
