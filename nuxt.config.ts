@@ -4,7 +4,7 @@ import { defineNuxtConfig } from "nuxt";
 export default defineNuxtConfig({
   dev: false,
   server: {
-    port: 3010,
+    port: 3020,
   },
   nitro: {
     preset: "node-server",
