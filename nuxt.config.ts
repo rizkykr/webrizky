@@ -2,7 +2,10 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  dev: true,
+  dev: false,
+  server: {
+    port: 3010,
+  },
   nitro: {
     preset: "node-server",
   },
