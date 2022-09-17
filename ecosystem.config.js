@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: "Web Rizky:3020",
-      exec_mode: "cluster",
-      instances: "max",
+      exec_mode: "fork",
+      instances: "1",
       script: "./.output/server/index.mjs",
       args: "start",
       port: 3020,

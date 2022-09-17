@@ -1,0 +1,1 @@
+git pull && npx nuxi cleanup && npx nuxi build && pm2 delete "Web Rizky:3020" && pm2 start && pm2 save
