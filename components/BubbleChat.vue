@@ -11,7 +11,7 @@
     v-else-if="type != 'img'"
   >
     <span
-      class="relative select-none animate__animated animate__faster rounded-2xl ring-1 ring-slate-900/5 shadow w-fit !leading-5 mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans"
+      class="relative select-none animate__animated animate__faster rounded-2xl ring-1 ring-slate-900/5 shadow w-fit max-w-full mb-2 md:mx-4 mx-3 md:text-base text-sm antialiased font-sans break-words"
       :class="[
         type == 'loading'
           ? 'md:py-3 py-2 md:px-6 px-4 animate__fadeInUp'
@@ -20,14 +20,16 @@
             } animate__bounceIn`,
         pos == 'right'
           ? 'bg-gradient-to-r from-sky-500 to-indigo-500 text-white'
-          : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white',
+          : `${color} ${
+              kontain(color, 'badword') && '!text-white'
+            } dark:bg-slate-800 text-slate-900 dark:text-white`,
       ]"
     >
       <div
         class="mediachat -ml-2 md:mb-3 mb-2 gap-2"
         :class="
           media.length == 1
-            ? '-mr-12 grid-cols-1'
+            ? '-mr-12 md:-ml-3 grid-cols-1'
             : 'md:-mr-12 -mr-14 grid-cols-2'
         "
         v-if="media.length > 0 && pos == 'left' && type != 'loading'"
@@ -76,16 +78,6 @@
     </div>
   </div>
 </template>
-<style>
-.lazyload,
-.lazyloading {
-  opacity: 0;
-}
-.lazyloaded {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-</style>
 <script>
 import _ from "lodash";
 import "lazysizes";
@@ -109,6 +101,10 @@ export default {
     media: {
       type: Array,
       default: [],
+    },
+    color: {
+      type: String,
+      default: "bg-white",
     },
   },
   methods: {

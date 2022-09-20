@@ -5,6 +5,7 @@ import {
   useToggle,
   useTimeoutFn,
   useIntervalFn,
+  onClickOutside,
 } from "@vueuse/core";
 export default defineComponent({
   async setup() {
@@ -45,6 +46,7 @@ export default defineComponent({
     };
     return {
       startApp: false,
+      stateApp: false,
       showDialog: false,
       teksType: "",
       sosmed: [
@@ -83,14 +85,18 @@ export default defineComponent({
       },
       aiBrain: {
         start: sambutan["id"],
-        help: {
-          psn: "{BOT}Ini adalah Aplikasi Chat buatan RizkyKR yang merupakan aplikasi untuk menyanjikan informasi berupa portfolio, resume maupun artikel rizky, untuk memulai anda dapat menggunakan kolom chat yang telah dilengkapi AI sehingga Bot saya dapat membalas anda secara langsung atau anda dapat menggunakan tombol menu atau kontak untuk menghubungi saya, terima kasih!",
-        },
-        kontak: { psn: "function(bukaDialog)" },
-        portofolio: {
-          psn: "{BOT}Berikut adalah portofolio saya.",
-          media: ["/img/web.jpg"],
-        },
+        help: [
+          {
+            psn: "{BOT}Ini adalah Aplikasi Chat buatan RizkyKR yang merupakan aplikasi untuk menyanjikan informasi berupa portfolio, resume maupun artikel rizky, untuk memulai anda dapat menggunakan kolom chat yang telah dilengkapi AI sehingga Bot saya dapat membalas anda secara langsung atau anda dapat menggunakan tombol menu atau kontak untuk menghubungi saya, terima kasih!",
+          },
+        ],
+        kontak: [{ psn: "function(bukaDialog)" }],
+        portofolio: [
+          {
+            psn: "{BOT}Berikut adalah portofolio saya.",
+            media: ["/img/web.jpg"],
+          },
+        ],
         pacar: [
           { psn: "Tentunya ada dongg." },
           {
@@ -102,6 +108,7 @@ export default defineComponent({
           },
         ],
       },
+      badWords: ["babi", "anjing", "anjeng", "kontol"],
     };
   },
   head: {
@@ -114,6 +121,11 @@ export default defineComponent({
     pesan() {
       this.autoSkroll();
     },
+    chatListState() {
+      onClickOutside(this.$refs.balutinEntry, (event) => {
+        this.toggleChatList();
+      });
+    },
   },
   methods: {
     bukaDialog: function () {
@@ -121,7 +133,6 @@ export default defineComponent({
     },
     initMessage(psn) {
       if (_.isArray(psn)) {
-        console.log("psn true");
         var cur = 0;
         const { pause, resume } = useIntervalFn(() => {
           if (_.isObjectLike(psn[cur])) {
@@ -139,7 +150,7 @@ export default defineComponent({
         this.kirimPesan({ psn: _.trim(psn) });
       }
     },
-    kirimPesan({ psn, pos = "left", media = [] }) {
+    kirimPesan({ psn, pos = "left", media = [], color = "bg-white" }) {
       this.autoSkroll();
       if (psn) {
         pos == "left" &&
@@ -153,15 +164,22 @@ export default defineComponent({
           this.autoSkroll();
         }, _.size("loading"));
         useTimeoutFn(() => {
+          const stateBadWords = _.some(this.badWords, function (o) {
+            return kontain(_.split(_.lowerCase(psn), " "), o);
+          });
+          const psnFilter = stateBadWords ? _.repeat("*", _.size(psn)) : psn;
           const dt = {
             type: kontain(psn, ".gif") || kontain(psn, ".jpg") ? "img" : "txt",
-            content: _.trim(psn),
+            content: psnFilter,
             pos: pos,
             media: media,
+            color: color,
           };
           this.pesan[cur - (pos == "left" ? 1 : 0)] = dt;
           this.autoSkroll();
-          pos == "right" && (this.AIChat(_.trim(psn)), (this.teksType = ""));
+          pos == "right" &&
+            (this.AIChat(stateBadWords ? "{BadWord}" : _.trim(psn)),
+            (this.teksType = ""));
         }, _.size(psn) * this.typingSpeed + (pos == "left" ? 500 : 50));
         setTimeout(() => {
           this.autoSkroll();
@@ -172,30 +190,62 @@ export default defineComponent({
       const fnd = _.replace(vl, "/", "");
       this.autoSkroll();
       setTimeout(() => {
-        const pesan = this.aiBrain[fnd]
-          ? this.aiBrain[fnd]
-          : {
-              psn: "{BOT}Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.",
-            };
-        if (kontain(pesan.psn, "function(")) {
-          const dt = _.replace(_.replace(pesan.psn, "function(", ""), ")", "");
-          if (kontain(dt, "=")) {
-            const fnc = _.split(dt, "=");
-            this[fnc[0]] = fnc[1];
-          } else {
-            this[dt]();
+        const lsAi = this.aiBrain;
+        const psnBdWrd = kontain(fnd, "{BadWord}");
+        const aiThinkBrain = [];
+        _.forEach(_.split(_.lowerCase(vl), " "), function (vlf) {
+          const idx = lsAi[vlf];
+          if (idx) {
+            aiThinkBrain.push(idx);
           }
-        } else {
-          if (pesan.length > 0) {
-            this.initMessage(pesan);
-          } else {
-            this.kirimPesan(pesan);
-            this.autoSkroll();
+        });
+        const pesan =
+          aiThinkBrain.length > 0
+            ? aiThinkBrain
+            : {
+                color: psnBdWrd
+                  ? "bg-gradient-to-r from-red-500 to-pink-500 badword"
+                  : "bg-white",
+                psn: psnBdWrd
+                  ? "{BOT}Tolong jangan menggunakan kata seperti itu ya."
+                  : "{BOT}Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.",
+              };
+        let pi = 0;
+        const plgth = [];
+        _.forEach(pesan, function (vl1) {
+          var vl2l = 0;
+          _.forEach(vl1, function (vl2) {
+            vl2l = vl2l + vl2.psn.length;
+          });
+          plgth.push(vl2l);
+        });
+        const { pause, resume, isActive } = useIntervalFn(() => {
+          if (pi < pesan.length) {
+            if (kontain(pesan[pi].psn, "function(")) {
+              const dt = _.replace(
+                _.replace(pesan.psn, "function(", ""),
+                ")",
+                ""
+              );
+              if (kontain(dt, "=")) {
+                const fnc = _.split(dt, "=");
+                this[fnc[0]] = fnc[1];
+              } else {
+                this[dt]();
+              }
+            } else {
+              this.initMessage(pesan[pi]);
+            }
+          }
+          pause();
+          pi < pesan.length &&
             setTimeout(() => {
-              this.autoSkroll();
-            }, _.size(pesan.psn) * this.typingSpeed + 500);
+              resume();
+            }, plgth[pi] * this.typingSpeed + 500);
+          if (pi < pesan.length) {
+            pi = pi + 1;
           }
-        }
+        }, 1000);
       }, _.size(vl) * this.typingSpeed + 500);
     },
     getCurTime() {
@@ -231,7 +281,9 @@ export default defineComponent({
     class="outeerapp flex flex-col fixed top-0 h-full w-screen overflow-auto scroll-smooth"
     ref="outeerapp"
   >
-    <div class="pesanApp flex items-center justify-center h-full select-none">
+    <div
+      class="pesanApp flex items-center justify-center h-full mx-auto lg:w-2/4 w-full select-none"
+    >
       <div
         class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white my-5 shadow rounded-xl p-3 md:max-w-md max-w-xs md:text-base text-sm"
       >
@@ -246,7 +298,7 @@ export default defineComponent({
       </div>
     </div>
     <div
-      class="apppesan flex flex-1 flex-col md:justify-start justify-end mb-14"
+      class="apppesan flex flex-1 flex-col md:justify-start mx-auto lg:w-2/4 w-full justify-end mb-14"
       ref="apppesan"
     >
       <LazyBubbleChat
@@ -255,79 +307,86 @@ export default defineComponent({
         :content="dt.content"
         :pos="dt.pos"
         :media="dt.media"
+        :color="dt.color"
       />
     </div>
-    <div
-      ref="chatEntry"
-      class="fixed inset-x-0 mx-auto z-20 flex items-center gap-3 md:rounded-full md:bottom-3 bottom-0 md:w-1/4 w-full md:left-3 backdrop-blur-md bg-white/60 dark:bg-slate-800 md:!p-0 px-2 py-1 md:mt-0 mt-1 md:border border-t dark:border-gray-300/30 border-gray-300 overflow-hidden"
-      :class="chatListState && '!rounded-none !border-x-0'"
-    >
-      <button
-        class="uppercase text-blue-500 font-semibold py-2 text-center flex-1 animate__animated animate__faster"
-        :class="startApp && 'absolute inset-x-0 animate__slideOutDown'"
-        @click="startAplikasi"
+    <div ref="balutinEntry">
+      <div
+        ref="chatEntry"
+        class="fixed inset-x-0 mx-auto z-20 flex items-center gap-3 transition-all md:rounded-full md:bottom-3 bottom-0 lg:w-2/4 w-full md:left-3 backdrop-blur-md bg-white/60 dark:bg-slate-800 md:!p-0 px-2 py-1 md:mt-0 mt-1 md:border border-t dark:border-gray-300/30 border-gray-300 overflow-hidden"
       >
-        mulai
-      </button>
-      <button
-        v-if="startApp"
-        @click="bukaDialog"
-        class="text-sky-600 text-center px-3 py-2 rounded-full text-sm flex-none"
-      >
-        <i class="bx bx-envelope align-middle text-2xl"></i>
-        <span class="hidden">{{ lang.ks[loc] }}</span>
-      </button>
-      <form
-        v-if="startApp"
-        class="flex flex-1 content-center"
-        @submit.prevent="
-          autoSkroll(),
-            kirimPesan({ psn: teksType, pos: 'right' }),
-            this.$refs.isiteksny.focus(),
-            autoSkroll()
-        "
-      >
-        <input
-          type="text"
-          class="bg-transparent focus:outline-0 py-1 text-base flex-1 dark:text-white"
-          placeholder="Ketikkan pesan"
-          v-model="teksType"
-          ref="isiteksny"
-          @click="autoSkroll()"
-          @focus="autoSkroll()"
-        />
         <button
-          v-if="teksType"
-          type="submit"
-          class="text-sky-600 md:shadow-l md:mr-2 text-center px-3 py-2 rounded-full text-sm flex-none w-10 h-10"
+          v-if="!startApp"
+          class="uppercase text-blue-500 font-semibold py-2 text-center flex-1"
+          @click="startAplikasi"
         >
-          <i class="bx bxs-send align-middle text-2xl"></i>
+          mulai
         </button>
         <button
-          @click="toggleChatList()"
-          v-else
-          class="dark:text-white md:-bottom-0 -bottom-1 relative md:mr-2 text-center py-1 px-2 rounded-full text-2xl flex-none justify-center"
+          v-if="startApp"
+          @click="bukaDialog"
+          class="text-sky-600 text-center px-3 py-2 rounded-full text-sm flex-none"
         >
-          <i class="bx bx-menu" :class="chatListState ? 'bx-x' : 'bx-menu'"></i>
+          <i class="bx bx-envelope align-middle text-2xl"></i>
+          <span class="hidden">{{ lang.ks[loc] }}</span>
         </button>
-      </form>
-    </div>
-    <div
-      v-if="startApp"
-      class="menuChat fixed inset-x-0 mx-auto z-10 md:left-3 backdrop-blur-md bg-white/80 dark:bg-slate-800 md:bottom-3 bottom-0 md:w-3/12 w-full md:rounded-t-xl dark:text-white animate__animated animate__faster shadow border-t"
-      :class="[chatListState ? 'animate__slideInUp' : 'animate__slideOutDown']"
-      :style="[`padding-bottom:${pbtmBtCht + 10}px`]"
-    >
-      <ul class="mt-2">
-        <li
-          v-for="dt in chatShortcut"
-          class="flex px-4 py-1.5 border-b border-white/10 last:border-b-0 cursor-pointer dark:hover:bg-slate-900 hover:border-white/5 select-none"
-          @click="kirimPesan({ psn: dt.cmd, pos: 'right' }), toggleChatList()"
+        <form
+          v-if="startApp"
+          class="flex flex-1 content-center"
+          @submit.prevent="
+            autoSkroll(),
+              kirimPesan({ psn: teksType, pos: 'right' }),
+              this.$refs.isiteksny.focus(),
+              autoSkroll()
+          "
         >
-          <span class="flex-1">{{ dt.title }}</span>
-          <span class="dark:text-white/30 text-black/30">{{ dt.cmd }}</span>
-        </li>
-      </ul>
+          <input
+            type="text"
+            class="bg-transparent focus:outline-0 py-1 text-base flex-1 dark:text-white"
+            placeholder="Ketikkan pesan"
+            v-model="teksType"
+            ref="isiteksny"
+            @click="autoSkroll()"
+            @focus="autoSkroll()"
+          />
+          <button
+            v-if="teksType"
+            type="submit"
+            class="text-sky-600 md:shadow-l md:mr-2 text-center px-3 py-2 rounded-full text-sm flex-none w-10 h-10"
+          >
+            <i class="bx bxs-send align-middle text-2xl"></i>
+          </button>
+          <button
+            @click="toggleChatList(), (stateApp = true)"
+            v-else
+            class="dark:text-white bottom-0 relative md:mr-2 text-center py-1 px-2 rounded-full text-2xl flex-none justify-center"
+          >
+            <i
+              class="bx bx-menu"
+              :class="chatListState ? 'bx-x' : 'bx-menu'"
+            ></i>
+          </button>
+        </form>
+      </div>
+      <div
+        v-if="stateApp"
+        class="menuChat fixed inset-x-0 mx-auto z-10 md:left-3 backdrop-blur-md bg-white/80 dark:bg-slate-800 md:bottom-4 bottom-0 md:w-3/12 w-full md:rounded-t-xl dark:text-white animate__animated animate__faster shadow border-t"
+        :class="[
+          chatListState ? 'animate__slideInUp' : 'animate__slideOutDown',
+        ]"
+        :style="[`padding-bottom:${pbtmBtCht + 10}px`]"
+      >
+        <ul class="mt-2">
+          <li
+            v-for="dt in chatShortcut"
+            class="flex px-4 py-1.5 border-b border-white/10 last:border-b-0 cursor-pointer dark:hover:bg-slate-900 hover:border-white/5 select-none"
+            @click="kirimPesan({ psn: dt.cmd, pos: 'right' }), toggleChatList()"
+          >
+            <span class="flex-1">{{ dt.title }}</span>
+            <span class="dark:text-white/30 text-black/30">{{ dt.cmd }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
     <LazyDialogSosmed
       :lang="lang"
