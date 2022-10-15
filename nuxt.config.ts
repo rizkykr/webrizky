@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/scss/main.scss"],
-  modules: ["@vueuse/nuxt", "@nuxtjs/partytown"],
+  modules: ["@vueuse/nuxt"],
   build: {
     postcss: {
       postcssOptions: require("./postcss.config.js"),
