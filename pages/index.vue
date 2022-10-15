@@ -1,4 +1,4 @@
-<script>
+<Script>
 import _ from "lodash";
 import {
   useElementBounding,
@@ -313,7 +313,7 @@ export default defineComponent({
     this.loc = _.lowerCase(this.lokasi.country);
   },
 });
-</script>
+</Script>
 <template>
   <div
     class="outeerapp flex flex-col fixed top-0 h-full w-screen overflow-auto scroll-smooth"
@@ -434,5 +434,15 @@ export default defineComponent({
       :lokasi="loc"
       @tutup="showDialog = false"
     />
+    <!-- Google tag (gtag.js) -->
+    <Script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=G-STS5CSJHDV"
+    />
+    <Script type="text/partytown">
+      window.dataLayer = window.dataLayer || []; function gtag() {
+      dataLayer.push(arguments); } gtag("js", new Date()); gtag("config",
+      "G-STS5CSJHDV");
+    </Script>
   </div>
 </template>
