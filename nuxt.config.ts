@@ -33,7 +33,13 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/scss/main.scss"],
-  modules: ["@vueuse/nuxt"],
+  modules: ["@vueuse/nuxt", "vue-plausible"],
+  plausible: {
+    // Use as fallback if no runtime config is available at runtime
+    domain: process.env.PLAUSIBLE_DOMAIN,
+    trackLocalhost: true,
+    enableAutoOutboundTracking: true,
+  },
   build: {
     postcss: {
       postcssOptions: require("./postcss.config.js"),
