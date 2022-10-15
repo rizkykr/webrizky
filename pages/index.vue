@@ -1,5 +1,4 @@
 <script>
-import _ from "lodash";
 import {
   useElementBounding,
   useToggle,
@@ -20,7 +19,7 @@ export default defineComponent({
     return { lokasi, chatListState, toggleChatList };
   },
   data() {
-    const langloc = _.lowerCase(this.lokasi.country);
+    const langloc = useLowerCase(this.lokasi.country);
     const sambutan = {
       id: [
         { psn: "/img/hai.gif" },
@@ -147,22 +146,22 @@ export default defineComponent({
       this.showDialog = true;
     },
     initMessage(psn) {
-      if (_.isArray(psn)) {
+      if (isArray(psn)) {
         var cur = 0;
         const { pause, resume } = useIntervalFn(() => {
-          if (_.isObjectLike(psn[cur])) {
+          if (isObjectLike(psn[cur])) {
             this.kirimPesan(psn[cur]);
           } else {
-            this.kirimPesan({ psn: _.trim(psn[cur]) });
+            this.kirimPesan({ psn: useTrim(psn[cur]) });
           }
           pause();
           setTimeout(() => {
             cur <= psn.length + 1 && resume();
             cur++;
-          }, _.size(psn[cur] && psn[cur].psn) * this.typingSpeed + 500);
+          }, useSize(psn[cur] && psn[cur].psn) * this.typingSpeed + 500);
         }, 1000);
       } else {
-        this.kirimPesan({ psn: _.trim(psn) });
+        this.kirimPesan({ psn: useTrim(psn) });
       }
     },
     kirimPesan({
@@ -180,17 +179,20 @@ export default defineComponent({
             content: "loading",
             pos: pos,
           });
-        const cur = _.size(this.pesan);
+        const cur = useSize(this.pesan);
         setTimeout(() => {
           this.autoSkroll();
-        }, _.size("loading"));
+        }, useSize("loading"));
         useTimeoutFn(() => {
-          const stateBadWords = _.some(this.badWords, function (o) {
-            return kontain(_.split(_.lowerCase(psn), " "), o);
+          const stateBadWords = useSome(this.badWords, function (o) {
+            return useIncludes(useSplit(useLowerCase(psn), " "), o);
           });
-          const psnFilter = stateBadWords ? _.repeat("*", _.size(psn)) : psn;
+          const psnFilter = stateBadWords ? useRepeat("*", useSize(psn)) : psn;
           const dt = {
-            type: kontain(psn, ".gif") || kontain(psn, ".jpg") ? "img" : "txt",
+            type:
+              useIncludes(psn, ".gif") || useIncludes(psn, ".jpg")
+                ? "img"
+                : "txt",
             content: psnFilter,
             pos: pos,
             media: media,
@@ -200,29 +202,29 @@ export default defineComponent({
           this.pesan[cur - (pos == "left" ? 1 : 0)] = dt;
           this.autoSkroll();
           pos == "right" &&
-            (this.AIChat(stateBadWords ? "{BadWord}" : _.trim(psn)),
+            (this.AIChat(stateBadWords ? "{BadWord}" : useTrim(psn)),
             (this.teksType = ""));
-        }, _.size(psn) * this.typingSpeed + (pos == "left" ? 500 : 50));
+        }, useSize(psn) * this.typingSpeed + (pos == "left" ? 500 : 50));
         setTimeout(() => {
           this.autoSkroll();
-        }, _.size(psn) * this.typingSpeed + (pos == "left" ? 500 : 50));
+        }, useSize(psn) * this.typingSpeed + (pos == "left" ? 500 : 50));
       }
     },
     AIChat(vl) {
-      const fnd = _.replace(vl, "/", "");
+      const fnd = useReplace(vl, "/", "");
       this.autoSkroll();
       setTimeout(() => {
         const lsAi = this.aiBrain;
-        const psnBdWrd = kontain(fnd, "{BadWord}");
+        const psnBdWrd = useIncludes(fnd, "{BadWord}");
         const aiThinkBrain = [];
-        _.forEach(_.split(_.lowerCase(vl), " "), function (vlf) {
+        useForEach(useSplit(useLowerCase(vl), " "), function (vlf) {
           const idx = lsAi[vlf];
           if (idx) {
             aiThinkBrain.push(idx);
           }
         });
         const pesan =
-          _.size(aiThinkBrain) > 0
+          useSize(aiThinkBrain) > 0
             ? aiThinkBrain
             : [
                 [
@@ -239,19 +241,19 @@ export default defineComponent({
         let pi = 0;
         const plgth = [];
         const typspd = this.typingSpeed;
-        _.forEach(pesan, function (vl1) {
+        useForEach(pesan, function (vl1) {
           var vl2l = 0;
-          _.forEach(vl1, function (vl2) {
-            var clc = _.size(vl2.psn) * (typspd / _.size(pesan) - 2);
+          useForEach(vl1, function (vl2) {
+            var clc = useSize(vl2.psn) * (typspd / useSize(pesan) - 2);
             vl2l = vl2l + clc - clc * 0.3;
           });
           plgth.push(vl2l);
         });
         const { pause, resume, isActive } = useIntervalFn(() => {
           if (pi < pesan.length) {
-            if (kontain(pesan[pi][0].psn, "function(")) {
-              const dt = _.replace(
-                _.replace(pesan[pi][0].psn, "function(", ""),
+            if (useIncludes(pesan[pi][0].psn, "function(")) {
+              const dt = useReplace(
+                useReplace(pesan[pi][0].psn, "function(", ""),
                 ")",
                 ""
               );
@@ -260,8 +262,8 @@ export default defineComponent({
                 icon: "bx bx-chip",
               });
               setTimeout(() => {
-                if (kontain(dt, "=")) {
-                  const fnc = _.split(dt, "=");
+                if (useIncludes(dt, "=")) {
+                  const fnc = useSplit(dt, "=");
                   this[fnc[0]] = fnc[1];
                 } else {
                   this[dt]();
@@ -280,7 +282,7 @@ export default defineComponent({
             pi = pi + 1;
           }
         }, 1000);
-      }, _.size(vl) * this.typingSpeed + 500);
+      }, useSize(vl) * this.typingSpeed + 500);
     },
     getCurTime() {
       var date = new Date(),
@@ -310,7 +312,7 @@ export default defineComponent({
   mounted() {
     const { height } = useElementBounding(this.$refs.chatEntry);
     this.pbtmBtCht = height;
-    this.loc = _.lowerCase(this.lokasi.country);
+    this.loc = useLowerCase(this.lokasi.country);
   },
 });
 </script>

@@ -22,7 +22,7 @@
         pos == 'right'
           ? 'bg-gradient-to-r from-sky-500 to-indigo-500 text-white'
           : `${color} ${
-              kontain(color, 'badword') && '!text-white'
+              useIncludes(color, 'badword') && '!text-white'
             } dark:bg-slate-800 text-slate-900 dark:text-white`,
       ]"
     >
@@ -56,7 +56,7 @@
       ></i
       ><span
         v-html="type == 'txt' ? isBot(content) : loadingText"
-        :class="[kontain(content, 'execute') && 'font-medium']"
+        :class="[useIncludes(content, 'execute') && 'font-medium']"
       ></span
       ><span
         class="absolute right-4 bottom-1 opacity-50 text-xs"
@@ -88,7 +88,6 @@
   </div>
 </template>
 <script>
-import _ from "lodash";
 import "lazysizes";
 import "lazysizes/plugins/parent-fit/ls.parent-fit";
 export default {
@@ -122,7 +121,9 @@ export default {
   },
   methods: {
     isBot(vl, st = "text") {
-      return st == "text" ? _.replace(vl, "{BOT}", "") : kontain(vl, "{BOT}");
+      return st == "text"
+        ? useReplace(vl, "{BOT}", "")
+        : useIncludes(vl, "{BOT}");
     },
     waktuahh() {
       const checkTime = function (i) {

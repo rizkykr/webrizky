@@ -36,7 +36,7 @@ export default defineNuxtConfig({
   schemaOrg: {
     canonicalHost: "https://www.rizkykr.com",
   },
-  modules: ["@vueuse/nuxt", "nuxt-schema-org"],
+  modules: ["@vueuse/nuxt", "nuxt-lodash", "nuxt-schema-org"],
   build: {
     postcss: {
       postcssOptions: require("./postcss.config.js"),

@@ -92,7 +92,6 @@
 </template>
 <script>
 import { onClickOutside } from "@vueuse/core";
-import _ from "lodash";
 export default {
   data() {
     return {
@@ -114,7 +113,7 @@ export default {
   methods: {
     bukamodal() {
       this.open1 = true;
-      _.delay(
+      useDelay(
         function (e) {
           e.open = true;
         },
@@ -124,7 +123,7 @@ export default {
     },
     tutupmodal() {
       this.open = false;
-      _.delay(
+      useDelay(
         function (e) {
           e.open1 = false;
           e.$emit("tutup");
