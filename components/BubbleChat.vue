@@ -3,7 +3,8 @@
     class="bg-black flex-shrink-0 mx-auto text-white !opacity-20 rounded-2xl px-3 my-3 text-sm animate__animated animate__faster animate__fadeInUp"
     v-if="pos == 'info'"
   >
-    {{ content }}
+    <i :class="icon" v-show="icon" class="text-lg align-middle mr-1"></i
+    >{{ content }}
   </div>
   <div
     class="chat-list flex last:md:mb-3"
@@ -48,7 +49,15 @@
           />
         </div>
       </div>
-      <span v-html="type == 'txt' ? isBot(content) : loadingText"></span
+      <i
+        :class="icon"
+        v-show="icon"
+        class="text-2xl align-text-top -ml-2 mr-2 text-sky-600"
+      ></i
+      ><span
+        v-html="type == 'txt' ? isBot(content) : loadingText"
+        :class="[kontain(content, 'execute') && 'font-medium']"
+      ></span
       ><span
         class="absolute right-4 bottom-1 opacity-50 text-xs"
         v-show="type != 'loading'"
@@ -97,6 +106,10 @@ export default {
     pos: {
       type: String,
       default: "left",
+    },
+    icon: {
+      type: String,
+      default: "",
     },
     media: {
       type: Array,

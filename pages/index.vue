@@ -20,6 +20,7 @@ export default defineComponent({
     return { lokasi, chatListState, toggleChatList };
   },
   data() {
+    const langloc = _.lowerCase(this.lokasi.country);
     const sambutan = {
       id: [
         { psn: "/img/hai.gif" },
@@ -34,14 +35,16 @@ export default defineComponent({
         { psn: "/img/blink.gif" },
       ],
       en: [
-        "/img/hai.gif",
-        "Hey there 👋",
-        "I'm Rizky",
-        "I design and code things on the web",
-        `I\'m currently accepting freelance work. You can contact me via the Contact me button.`,
-        this.getCurTime(),
-        "👀 R.",
-        "/img/blink.gif",
+        { psn: "/img/hai.gif" },
+        { psn: "Hey there 👋" },
+        { psn: "I'm Rizky" },
+        { psn: "I design and code things on the web" },
+        {
+          psn: `I\'m currently accepting freelance work. You can contact me via the Contact me button.`,
+        },
+        { psn: this.getCurTime() },
+        { psn: "👀 R." },
+        { psn: "/img/blink.gif" },
       ],
     };
     return {
@@ -84,7 +87,7 @@ export default defineComponent({
         greetings: sambutan,
       },
       aiBrain: {
-        start: sambutan["id"],
+        start: sambutan[langloc],
         help: [
           {
             psn: "{BOT}Ini adalah Aplikasi Chat buatan RizkyKR yang merupakan aplikasi untuk menyanjikan informasi berupa portfolio, resume maupun artikel rizky, untuk memulai anda dapat menggunakan kolom chat yang telah dilengkapi AI sehingga Bot saya dapat membalas anda secara langsung atau anda dapat menggunakan tombol menu atau kontak untuk menghubungi saya, terima kasih!",
@@ -108,7 +111,19 @@ export default defineComponent({
           },
         ],
       },
-      badWords: ["babi", "anjing", "anjeng", "kontol"],
+      badWords: [
+        "babi",
+        "anjing",
+        "anjeng",
+        "kontol",
+        "ngentot",
+        "memek",
+        "mmk",
+        "ajg",
+        "tol",
+        "jembot",
+        "jembut",
+      ],
     };
   },
   head: {
@@ -150,7 +165,13 @@ export default defineComponent({
         this.kirimPesan({ psn: _.trim(psn) });
       }
     },
-    kirimPesan({ psn, pos = "left", media = [], color = "bg-white" }) {
+    kirimPesan({
+      psn,
+      pos = "left",
+      media = [],
+      color = "bg-white",
+      icon = "",
+    }) {
       this.autoSkroll();
       if (psn) {
         pos == "left" &&
@@ -174,6 +195,7 @@ export default defineComponent({
             pos: pos,
             media: media,
             color: color,
+            icon: icon,
           };
           this.pesan[cur - (pos == "left" ? 1 : 0)] = dt;
           this.autoSkroll();
@@ -200,39 +222,51 @@ export default defineComponent({
           }
         });
         const pesan =
-          aiThinkBrain.length > 0
+          _.size(aiThinkBrain) > 0
             ? aiThinkBrain
-            : {
-                color: psnBdWrd
-                  ? "bg-gradient-to-r from-red-500 to-pink-500 badword"
-                  : "bg-white",
-                psn: psnBdWrd
-                  ? "{BOT}Tolong jangan menggunakan kata seperti itu ya."
-                  : "{BOT}Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.",
-              };
+            : [
+                [
+                  {
+                    color: psnBdWrd
+                      ? "bg-gradient-to-r from-red-500 to-pink-500 badword"
+                      : "bg-white",
+                    psn: psnBdWrd
+                      ? "{BOT}Tolong jangan menggunakan kata seperti itu ya."
+                      : "{BOT}Maaf Chat Bot saya belum memahami maksud anda. silahkan mengklik tombol menu dibawah.",
+                  },
+                ],
+              ];
         let pi = 0;
         const plgth = [];
+        const typspd = this.typingSpeed;
         _.forEach(pesan, function (vl1) {
           var vl2l = 0;
           _.forEach(vl1, function (vl2) {
-            vl2l = vl2l + vl2.psn.length;
+            var clc = _.size(vl2.psn) * (typspd / _.size(pesan) - 2);
+            vl2l = vl2l + clc - clc * 0.3;
           });
           plgth.push(vl2l);
         });
         const { pause, resume, isActive } = useIntervalFn(() => {
           if (pi < pesan.length) {
-            if (kontain(pesan[pi].psn, "function(")) {
+            if (kontain(pesan[pi][0].psn, "function(")) {
               const dt = _.replace(
-                _.replace(pesan.psn, "function(", ""),
+                _.replace(pesan[pi][0].psn, "function(", ""),
                 ")",
                 ""
               );
-              if (kontain(dt, "=")) {
-                const fnc = _.split(dt, "=");
-                this[fnc[0]] = fnc[1];
-              } else {
-                this[dt]();
-              }
+              this.kirimPesan({
+                psn: "{BOT}execute: " + dt,
+                icon: "bx bx-chip",
+              });
+              setTimeout(() => {
+                if (kontain(dt, "=")) {
+                  const fnc = _.split(dt, "=");
+                  this[fnc[0]] = fnc[1];
+                } else {
+                  this[dt]();
+                }
+              }, 1400);
             } else {
               this.initMessage(pesan[pi]);
             }
@@ -241,7 +275,7 @@ export default defineComponent({
           pi < pesan.length &&
             setTimeout(() => {
               resume();
-            }, plgth[pi] * this.typingSpeed + 500);
+            }, plgth[pi] * typspd + 500);
           if (pi < pesan.length) {
             pi = pi + 1;
           }
@@ -257,7 +291,11 @@ export default defineComponent({
     },
     startAplikasi() {
       this.initMessage([
-        { psn: "Memulai aplikasi", pos: "info" },
+        {
+          psn: "Memulai aplikasi",
+          pos: "info",
+          icon: "bx bxs-bolt",
+        },
         { psn: "/start", pos: "right" },
       ]);
       this.startApp = true;
@@ -308,6 +346,7 @@ export default defineComponent({
         :pos="dt.pos"
         :media="dt.media"
         :color="dt.color"
+        :icon="dt.icon"
       />
     </div>
     <div ref="balutinEntry">
