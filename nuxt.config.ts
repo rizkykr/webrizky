@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     apiBase: process.env.API_BASE_URL || "", // can be overridden by NUXT_API_BASE environment variable
   },
   app: {
-    buildAssetsDir: "/apps/",
     head: {
       viewport:
         "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
