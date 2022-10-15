@@ -15,9 +15,9 @@ export default defineNuxtConfig({
         {
           hid: "description",
           name: "description",
-          content: "I design and code things on the web.",
+          content:
+            "Frontend Web Developer, I design and code things on the web.",
         },
-        { name: "format-detection", content: "telephone=no" },
       ],
       link: [
         {
@@ -32,8 +32,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ["~/assets/scss/main.scss"],
-  modules: ["@vueuse/nuxt"],
+  css: ["assets/scss/main.scss"],
+  schemaOrg: {
+    canonicalHost: "https://www.rizkykr.com",
+  },
+  modules: ["@vueuse/nuxt", "nuxt-schema-org"],
   build: {
     postcss: {
       postcssOptions: require("./postcss.config.js"),

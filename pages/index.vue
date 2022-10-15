@@ -127,7 +127,7 @@ export default defineComponent({
     };
   },
   head: {
-    title: `RizkyKR - Web Fullstack Developer`,
+    title: `RizkyKR - Frontend Web Developer`,
     bodyAttrs: {
       class: "bg-slate-50 dark:bg-slate-900",
     },
