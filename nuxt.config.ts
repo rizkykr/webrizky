@@ -27,14 +27,6 @@ export default defineNuxtConfig({
           href: "/favicon.ico",
         },
       ],
-      script: [
-        // Insert your Google Tag Manager Script here
-        {
-          src: "https://www.googletagmanager.com/gtag/js?id=G-STS5CSJHDV",
-          async: true,
-          type: "text/partytown",
-        },
-      ],
       noscript: [
         // <noscript>Javascript is required</noscript>
         { children: "Javascript is required" },
@@ -43,9 +35,6 @@ export default defineNuxtConfig({
   },
   css: ["~/assets/scss/main.scss"],
   modules: ["@vueuse/nuxt", "@nuxtjs/partytown"],
-  partytown: {
-    forward: ["dataLayer.push"],
-  },
   build: {
     postcss: {
       postcssOptions: require("./postcss.config.js"),
