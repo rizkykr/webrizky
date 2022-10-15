@@ -1,4 +1,4 @@
-<Script>
+<script>
 import _ from "lodash";
 import {
   useElementBounding,
@@ -313,7 +313,7 @@ export default defineComponent({
     this.loc = _.lowerCase(this.lokasi.country);
   },
 });
-</Script>
+</script>
 <template>
   <div
     class="outeerapp flex flex-col fixed top-0 h-full w-screen overflow-auto scroll-smooth"
