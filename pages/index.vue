@@ -434,15 +434,5 @@ export default defineComponent({
       :lokasi="loc"
       @tutup="showDialog = false"
     />
-    <!-- Google tag (gtag.js) -->
-    <Script
-      type="text/partytown"
-      src="https://www.googletagmanager.com/gtag/js?id=G-STS5CSJHDV"
-    />
-    <Script type="text/partytown">
-      window.dataLayer = window.dataLayer || []; function gtag() {
-      dataLayer.push(arguments); } gtag("js", new Date()); gtag("config",
-      "G-STS5CSJHDV");
-    </Script>
   </div>
 </template>
