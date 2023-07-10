@@ -13,7 +13,6 @@ export default defineNuxtConfig({
         "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
       meta: [
         {
-          hid: "description",
           name: "description",
           content:
             "Frontend Web Developer, I design and code things on the web.",
@@ -32,14 +31,12 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ["assets/scss/main.scss"],
-  schemaOrg: {
-    canonicalHost: "https://www.rizkykr.com",
-  },
-  modules: ["@vueuse/nuxt", "nuxt-lodash", "nuxt-schema-org"],
-  build: {
-    postcss: {
-      postcssOptions: require("./postcss.config.js"),
+  css: ["@/assets/css/main.scss"],
+  modules: ["@vueuse/nuxt", "nuxt-lodash"],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
     },
   },
 });

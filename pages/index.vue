@@ -8,18 +8,23 @@ import {
 } from "@vueuse/core";
 export default defineComponent({
   async setup() {
-    const [{ data: lokasi }] = await Promise.all([
-      useFetch(`/?token=${useRuntimeConfig().apiSecret}`, {
+    useHead({
+      title: `RizkyKR - Frontend Web Developer`,
+      bodyAttrs: {
+        class: "bg-slate-50 dark:bg-slate-900",
+      },
+    });
+    const { data: lokasi } = await useAsyncData("lokasi", () =>
+      $fetch(`/?token=${useRuntimeConfig().apiSecret}`, {
         baseURL: useRuntimeConfig().apiBase,
         pick: ["country"],
-        parseResponse: JSON.parse,
-      }),
-    ]);
+      })
+    );
     const [chatListState, toggleChatList] = useToggle();
     return { lokasi, chatListState, toggleChatList };
   },
   data() {
-    const langloc = useLowerCase(this.lokasi.country);
+    const langloc = useLowerCase(this.lokasi?.country);
     const sambutan = {
       id: [
         { psn: "/img/hai.gif" },
@@ -124,12 +129,6 @@ export default defineComponent({
         "jembut",
       ],
     };
-  },
-  head: {
-    title: `RizkyKR - Frontend Web Developer`,
-    bodyAttrs: {
-      class: "bg-slate-50 dark:bg-slate-900",
-    },
   },
   watch: {
     pesan() {
@@ -312,7 +311,7 @@ export default defineComponent({
   mounted() {
     const { height } = useElementBounding(this.$refs.chatEntry);
     this.pbtmBtCht = height;
-    this.loc = useLowerCase(this.lokasi.country);
+    this.loc = useLowerCase(this.lokasi?.country);
   },
 });
 </script>
