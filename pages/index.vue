@@ -14,17 +14,17 @@ export default defineComponent({
         class: "bg-slate-50 dark:bg-slate-900",
       },
     });
-    const { data: lokasi } = await useAsyncData("lokasi", () =>
-      $fetch(`/?token=${useRuntimeConfig().apiSecret}`, {
-        baseURL: useRuntimeConfig().apiBase,
-        pick: ["country"],
-      })
-    );
+    const apiloc = `https://fetchnegara.rizkykr.workers.dev/`;
+    const { data: lokasi } = await useFetch(apiloc);
     const [chatListState, toggleChatList] = useToggle();
-    return { lokasi, chatListState, toggleChatList };
+    return {
+      lokasi: useLowerCase(lokasi?.value?.negara),
+      chatListState,
+      toggleChatList,
+    };
   },
   data() {
-    const langloc = useLowerCase(this.lokasi?.country);
+    const langloc = this.lokasi;
     const sambutan = {
       id: [
         { psn: "/img/hai.gif" },
@@ -62,7 +62,6 @@ export default defineComponent({
         ["Codepen", "https://codepen.io/rizkykurniawanritonga"],
       ],
       pesan: [],
-      loc: "en",
       pesancur: 0,
       typingSpeed: 20,
       pbtmBtCht: 0,
@@ -87,11 +86,15 @@ export default defineComponent({
             id: "Tutup",
             en: "Close",
           },
+          startApp: {
+            id: "mulai",
+            en: "start",
+          },
         },
         greetings: sambutan,
       },
       aiBrain: {
-        start: sambutan[langloc],
+        start: sambutan[langloc == "id" ? "id" : "en"],
         help: [
           {
             psn: "{BOT}Ini adalah Aplikasi Chat buatan RizkyKR yang merupakan aplikasi untuk menyanjikan informasi berupa portfolio, resume maupun artikel rizky, untuk memulai anda dapat menggunakan kolom chat yang telah dilengkapi AI sehingga Bot saya dapat membalas anda secara langsung atau anda dapat menggunakan tombol menu atau kontak untuk menghubungi saya, terima kasih!",
@@ -311,7 +314,6 @@ export default defineComponent({
   mounted() {
     const { height } = useElementBounding(this.$refs.chatEntry);
     this.pbtmBtCht = height;
-    this.loc = useLowerCase(this.lokasi?.country);
   },
 });
 </script>
@@ -360,7 +362,7 @@ export default defineComponent({
           class="uppercase text-blue-500 font-semibold py-2 text-center flex-1"
           @click="startAplikasi"
         >
-          mulai
+          {{ lang.btn.startApp[lokasi] }}
         </button>
         <button
           v-if="startApp"
@@ -368,7 +370,7 @@ export default defineComponent({
           class="text-sky-600 text-center px-3 py-2 rounded-full text-sm flex-none"
         >
           <i class="bx bx-envelope align-middle text-2xl"></i>
-          <span class="hidden">{{ lang.ks[loc] }}</span>
+          <span class="hidden">{{ lang.ks[lokasi] }}</span>
         </button>
         <form
           v-if="startApp"
@@ -432,7 +434,7 @@ export default defineComponent({
       :lang="lang"
       :show="showDialog"
       :sosmed="sosmed"
-      :lokasi="loc"
+      :lokasi="lokasi"
       @tutup="showDialog = false"
     />
   </div>
