@@ -362,7 +362,7 @@ export default defineComponent({
           class="uppercase text-blue-500 font-semibold py-2 text-center flex-1"
           @click="startAplikasi"
         >
-          {{ lang.btn.startApp[lokasi] }}
+          {{ lang.btn.startApp[lokasi == "id" ? "id" : "en"] }}
         </button>
         <button
           v-if="startApp"
