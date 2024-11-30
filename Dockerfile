@@ -24,4 +24,4 @@ EXPOSE 3020
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3020
 
-CMD [ "npm", "preview" ]
+CMD [ "node", ".output/server/index.mjs" ]
