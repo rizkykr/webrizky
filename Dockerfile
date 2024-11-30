@@ -19,12 +19,9 @@ ENV API_BASE_URL=https://ipinfo.io/json
 RUN npm ci && \
 npx nuxt build
 
-# Expose port 3000 for the docker containers
 EXPOSE 3020
 
-# Set NuxtJS system variables so the application can be reached on your network
-ENV HOST=0.0.0.0
-ENV PORT=3020
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3020
 
-# The NuxtJS start-up command when the container is launched to serve the built application
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "start" ]
