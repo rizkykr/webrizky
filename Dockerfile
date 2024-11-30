@@ -20,11 +20,11 @@ RUN npm ci && \
 npx nuxt build
 
 # Expose port 3000 for the docker containers
-EXPOSE 3000
+EXPOSE 3020
 
 # Set NuxtJS system variables so the application can be reached on your network
 ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV PORT=3020
 
 # The NuxtJS start-up command when the container is launched to serve the built application
 CMD [ "npm", "run", "start" ]
